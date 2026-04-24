@@ -30,9 +30,9 @@ export default function CampaignNewPage() {
   const { trigger, isMutating } = useMutation<CampaignResponse, CreateCampaignRequest>(
     "/campaigns",
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         void mutate("/campaigns");
-        navigate("/campaigns");
+        navigate(`/campaigns/${data.id}`);
       },
     },
   );
