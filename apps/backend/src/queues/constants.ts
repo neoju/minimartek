@@ -1,0 +1,2 @@
+export const EMAIL_SEND_BATCH_SIZE = 5;
+export const EMAIL_SEND_CONCURRENCY_PER_CAMPAIGN = 10;

@@ -1,0 +1,33 @@
+{
+  "name": "@repo/dto",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b --watch",
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "test": "node --import tsx --test tests/**/*.test.ts",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@repo/utils": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "eslint": "^9.39.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.2"
+  }
+}

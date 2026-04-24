@@ -1,0 +1,18 @@
+(node:316800) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS tests/campaigns.service.test.ts
+  Campaign service — sync campaign_recipients materialization
+    ✓ POST /campaigns inserts campaign_recipients synchronously when emails match (51 ms)
+    ✓ POST /campaigns returns 400 NO_MATCHING_RECIPIENTS when zero emails match (5 ms)
+    ✓ POST /campaigns rejects 1001 emails with 400 validation error (4 ms)
+    ✓ POST /campaigns rejects recipient_emails:'all' with 400 (4 ms)
+    ✓ POST /campaigns does NOT enqueue preparation job (4 ms)
+    ✓ POST /campaigns/:id/send transitions draft→sending and enqueues emailSendingQueue job (4 ms)
+    ✓ POST /campaigns/:id/send on scheduled removes old delayed job before enqueuing immediate job (3 ms)
+    ✓ POST /campaigns/:id/send is idempotent when already sending (returns 409 CAMPAIGN_BUSY) (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       8 passed, 8 total
+Snapshots:   0 total
+Time:        0.456 s, estimated 1 s
+Ran all test suites matching /campaigns.service/i.

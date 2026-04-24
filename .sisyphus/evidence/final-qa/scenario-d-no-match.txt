@@ -1,0 +1,15 @@
+SCENARIO D — All Unknown Emails → 400 NO_MATCHING_RECIPIENTS
+=============================================================
+Request:
+  POST /api/campaigns
+  Body: { "name":"QA D - All Unknown", "subject":"Subj D", "body":"<p>Body</p>",
+          "recipient_emails":["nobody1@fake.test","nobody2@fake.test","nobody3@fake.test"] }
+
+Response:
+  HTTP 400
+  {"code":"NO_MATCHING_RECIPIENTS","message":"None of the provided emails match known recipients."}
+
+VERDICT: PASS ✅
+  - Correct HTTP status (400)
+  - Correct error code (NO_MATCHING_RECIPIENTS)
+  - No campaign created

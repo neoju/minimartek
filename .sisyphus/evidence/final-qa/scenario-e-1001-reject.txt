@@ -1,0 +1,16 @@
+SCENARIO E — 1001 Emails → 400 Zod Validation
+===============================================
+Request:
+  POST /api/campaigns
+  Body: { "name":"QA E - 1001", "subject":"Subj E", "body":"<p>Body</p>",
+          "recipient_emails": [1001 email strings] }
+
+Response:
+  HTTP 400
+  {"code":"VALIDATION_ERROR","message":"Invalid request body",
+   "details":{"formErrors":[],"fieldErrors":{"recipient_emails":["Array must contain at most 1000 element(s)"]}}}
+
+VERDICT: PASS ✅
+  - Correct HTTP status (400)
+  - Correct error code (VALIDATION_ERROR)
+  - Correct field error: recipient_emails maxItems=1000 enforced by Zod

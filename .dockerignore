@@ -1,0 +1,11 @@
+.git
+.omx
+node_modules
+**/node_modules
+**/dist
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+.DS_Store
+*.log
+.yarn/install-state.gz

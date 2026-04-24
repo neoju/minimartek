@@ -1,0 +1,28 @@
+{
+  "name": "minimartek",
+  "private": true,
+  "scripts": {
+    "build": "yarn workspaces foreach -At run build",
+    "dev": "yarn workspaces foreach -Api run dev",
+    "lint": "yarn workspaces foreach -At run lint --fix",
+    "test": "yarn workspaces foreach -At run test",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "yarn workspaces foreach -At run check-types"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "yarn@4.1.1",
+  "engines": {
+    "node": ">=18"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "resolutions": {
+    "@types/express": "4.17.21",
+    "@types/express-serve-static-core": "4.19.8"
+  }
+}

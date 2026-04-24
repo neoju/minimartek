@@ -1,0 +1,31 @@
+SCENARIO K — OpenAPI / DTO Contract
+=====================================
+Source: packages/dto/src/campaign.ts (shared Zod schemas)
+Runtime validation: Zod enforced at backend request parsing
+
+Checks:
+
+1. No RecipientsMode type/enum:
+   grep "RecipientsMode" packages/dto/src/*.ts → (no results) ✅
+
+2. No recipients_mode field in any schema:
+   grep "recipients_mode" packages/dto/src/*.ts → (no results) ✅
+
+3. recipient_emails maxItems=1000:
+   CreateCampaignRequestSchema:
+     recipient_emails: z.array(z.string().email()).min(1).max(1000)  ✅
+   Confirmed by Scenario E: 1001 emails → 400 VALIDATION_ERROR
+
+4. CampaignResponseSchema has no recipients_mode field:
+   Fields: id, name, subject, body, status, scheduled_at, created_by, created_at, updated_at ✅
+
+5. CampaignStatusSchema values: ["draft", "scheduled", "sending", "sent"]
+   No "all"/"specific" mode values ✅
+
+Note: Backend does not expose a /api/openapi.json endpoint (404).
+      Contract verified directly from shared DTO source (single source of truth).
+
+VERDICT: PASS ✅
+  - No RecipientsMode anywhere in contract
+  - No recipients_mode field in any schema
+  - recipient_emails correctly capped at 1000 (Zod + runtime-verified)

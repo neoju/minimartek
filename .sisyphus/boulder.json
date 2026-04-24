@@ -1,0 +1,49 @@
+{
+  "active_plan": "/home/neo/Dev/me/99tech-test/minimartek/.sisyphus/plans/remove-send-all-and-prep-queue.md",
+  "started_at": "2026-04-24T07:06:48.363Z",
+  "session_ids": [
+    "ses_241affbefffe3GWhfmmcofrKh8"
+  ],
+  "session_origins": {
+    "ses_241affbefffe3GWhfmmcofrKh8": "direct"
+  },
+  "plan_name": "remove-send-all-and-prep-queue",
+  "agent": "atlas",
+  "task_sessions": {
+    "todo:5": {
+      "task_key": "todo:5",
+      "task_label": "5",
+      "task_title": "**Queue layer simplification: delete `outbox.ts`, delete `workers/preparation.ts`, trim `queues.ts`, unregister preparation worker in `index.ts`**",
+      "session_id": "ses_2419a1d2effeAD4T2BC98zhCt0",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-04-24T07:34:03.093Z"
+    },
+    "final-wave:f1": {
+      "task_key": "final-wave:f1",
+      "task_label": "F1",
+      "task_title": "**Plan Compliance Audit** — `oracle`",
+      "session_id": "ses_241923fbaffeaTc4wXJz26QsLM",
+      "agent": "oracle",
+      "updated_at": "2026-04-24T07:43:10.577Z"
+    },
+    "final-wave:f3": {
+      "task_key": "final-wave:f3",
+      "task_label": "F3",
+      "task_title": "**Real Manual QA** — `unspecified-high` (+ `playwright` skill)",
+      "session_id": "ses_241675885ffeISiWzJzvRt2U38",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-04-24T08:56:09.204Z"
+    },
+    "final-wave:f4": {
+      "task_key": "final-wave:f4",
+      "task_label": "F4",
+      "task_title": "**Scope Fidelity Check** — `deep`",
+      "session_id": "ses_24127bd94ffezuLL2CHk62Y4MW",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-04-24T09:36:27.423Z"
+    }
+  }
+}

@@ -1,0 +1,154 @@
+(node:303511) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL tests/campaigns.service.test.ts
+  Campaign service — sync campaign_recipients materialization
+    ✕ POST /campaigns inserts campaign_recipients synchronously when emails match (44 ms)
+    ✕ POST /campaigns returns 400 NO_MATCHING_RECIPIENTS when zero emails match (3 ms)
+    ✕ POST /campaigns rejects 1001 emails with 400 validation error (2 ms)
+    ✕ POST /campaigns rejects recipient_emails:'all' with 400 (3 ms)
+    ✕ POST /campaigns does NOT enqueue preparation job (2 ms)
+    ✕ POST /campaigns/:id/send transitions draft→sending and enqueues emailSendingQueue job (2 ms)
+    ✕ POST /campaigns/:id/send on scheduled removes old delayed job before enqueuing immediate job (2 ms)
+    ✕ POST /campaigns/:id/send is idempotent when already sending (returns 409 CAMPAIGN_BUSY) (2 ms)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns inserts campaign_recipients synchronously when emails match
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 401
+
+      75 |       .send({ name: "Test", subject: "Sub", body: "Body", recipient_emails: ["a@b.com"] });
+      76 |
+    > 77 |     expect(res.status).toBe(201);
+         |                        ^
+      78 |     expect(res.body.status).toBe("draft");
+      79 |     expect(res.body).not.toHaveProperty("recipients_mode");
+      80 |   });
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:77:24)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns returns 400 NO_MATCHING_RECIPIENTS when zero emails match
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 401
+
+       99 |       .send({ name: "Test", subject: "Sub", body: "Body", recipient_emails: ["nobody@nowhere.com"] });
+      100 |
+    > 101 |     expect(res.status).toBe(400);
+          |                        ^
+      102 |     expect(res.body.code).toBe("NO_MATCHING_RECIPIENTS");
+      103 |   });
+      104 |
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:101:24)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns rejects 1001 emails with 400 validation error
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 401
+
+      113 |       .send({ name: "Test", subject: "Sub", body: "Body", recipient_emails: emails });
+      114 |
+    > 115 |     expect(res.status).toBe(400);
+          |                        ^
+      116 |   });
+      117 |
+      118 |   it("POST /campaigns rejects recipient_emails:'all' with 400", async () => {
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:115:24)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns rejects recipient_emails:'all' with 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 401
+
+      125 |       .send({ name: "Test", subject: "Sub", body: "Body", recipient_emails: "all" });
+      126 |
+    > 127 |     expect(res.status).toBe(400);
+          |                        ^
+      128 |   });
+      129 |
+      130 |   it("POST /campaigns does NOT enqueue preparation job", async () => {
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:127:24)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns does NOT enqueue preparation job
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 401
+
+      149 |       .send({ name: "Test", subject: "Sub", body: "Body", recipient_emails: ["a@b.com"] });
+      150 |
+    > 151 |     expect(res.status).toBe(201);
+          |                        ^
+      152 |     expect(prepSpy).not.toHaveBeenCalled();
+      153 |   });
+      154 |
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:151:24)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns/:id/send transitions draft→sending and enqueues emailSendingQueue job
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      174 |       .send();
+      175 |
+    > 176 |     expect(res.status).toBe(200);
+          |                        ^
+      177 |     expect(res.body.status).toBe("sending");
+      178 |     expect(addSpy).toHaveBeenCalledTimes(1);
+      179 |   });
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:176:24)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns/:id/send on scheduled removes old delayed job before enqueuing immediate job
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      201 |       .send();
+      202 |
+    > 203 |     expect(res.status).toBe(200);
+          |                        ^
+      204 |     expect(removeSpy).toHaveBeenCalled();
+      205 |     expect(addSpy).toHaveBeenCalled();
+      206 |     // remove must be called before add
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:203:24)
+
+  ● Campaign service — sync campaign_recipients materialization › POST /campaigns/:id/send is idempotent when already sending (returns 409 CAMPAIGN_BUSY)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 401
+
+      227 |       .send();
+      228 |
+    > 229 |     expect(res.status).toBe(409);
+          |                        ^
+      230 |     expect(res.body.code).toBe("CAMPAIGN_BUSY");
+      231 |   });
+      232 | });
+
+      at Object.<anonymous> (tests/campaigns.service.test.ts:229:24)
+
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 8 total
+Snapshots:   0 total
+Time:        0.58 s
+Ran all test suites matching /campaigns.service/i.

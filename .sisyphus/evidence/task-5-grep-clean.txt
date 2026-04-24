@@ -1,0 +1,4 @@
+rg -n 'preparationQueue|createImmediatePreparationJobId|getPreparationSeedJobId|queueOutboxAddJob|queueOutboxRemoveJob|flushQueueOutbox|startQueueOutboxProcessor|PreparationJobData' apps/backend/src/
+
+Exit code: 1 (no matches found)
+All ghost symbols have been purged.

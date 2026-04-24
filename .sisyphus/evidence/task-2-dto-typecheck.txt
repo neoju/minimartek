@@ -1,0 +1,2 @@
+yarn workspace @repo/dto check-types
+result: passed

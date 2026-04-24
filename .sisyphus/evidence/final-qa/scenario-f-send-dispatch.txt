@@ -1,0 +1,22 @@
+SCENARIO F — Send Campaign → Dispatch Job Enqueued
+===================================================
+Campaign ID: 019dbea4-5d2e-7ef4-9acf-bbc426c971f2 (5 recipients, from Scenario C)
+
+Request:
+  POST /api/campaigns/019dbea4-5d2e-7ef4-9acf-bbc426c971f2/send
+
+Response:
+  HTTP 200
+  { "status": "sending", ... }
+
+Redis dispatch job key found immediately after send:
+  bull:email-sending:campaign-dispatch__immediate__019dbea4-5d2e-7ef4-9acf-bbc426c971f2__87cb1b36-5889-4067-a91a-a706a65572de
+
+Campaign status after processing:
+  GET /api/campaigns/019dbea4-5d2e-7ef4-9acf-bbc426c971f2 → status: "sent"
+
+VERDICT: PASS ✅
+  - HTTP 200 returned immediately
+  - status transitioned draft → sending → sent
+  - BullMQ dispatch job enqueued in Redis (bull:email-sending queue)
+  - Campaign completed successfully (5 recipients processed)

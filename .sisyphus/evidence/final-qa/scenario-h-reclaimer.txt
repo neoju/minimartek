@@ -1,0 +1,23 @@
+SCENARIO H — Stalled Reclaimer Test
+=====================================
+Campaign ID: 019dbeab-ccaf-71ee-b2d5-daace88ed926 (3 recipients: alice.1, bob.2, carol.3)
+
+Setup:
+  1. Created campaign via POST /api/campaigns → HTTP 201, status=draft
+  2. Forced status to 'sending' directly in DB:
+     UPDATE campaigns SET status='sending' WHERE id='...'
+  3. Confirmed NO BullMQ job in Redis for this campaign (orphaned/stalled)
+
+Timer started: Fri Apr 24 03:47:22 PM +07 2026
+
+After ~1m45s (reclaimer interval ~60s):
+  Redis key found: bull:email-sending:campaign-dispatch__019dbeab-ccaf-71ee-b2d5-daace88ed926
+  Campaign status in DB: sent
+
+Checked at: Fri Apr 24 03:49:07 PM +07 2026
+
+VERDICT: PASS ✅
+  - Stalled campaign (sending, no BullMQ job) was detected by reclaimer
+  - Reclaimer created a new dispatch job in Redis
+  - Campaign processed to completion (status=sent)
+  - Reclaimer fired within expected interval (~60s)

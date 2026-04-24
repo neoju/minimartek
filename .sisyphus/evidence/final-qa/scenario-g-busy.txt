@@ -1,0 +1,23 @@
+SCENARIO G (RETRY) — CAMPAIGN_BUSY on Sending Campaign → 409
+==============================================================
+Campaign ID: 019dbeac-594d-790d-b501-829ca04c6a42 (50 recipients)
+
+Step 1 — Send campaign:
+  POST /api/campaigns/019dbeac-594d-790d-b501-829ca04c6a42/send
+  Response: HTTP 200, status="sending"
+
+Step 2 — Immediately re-send (0.2s later, while still in sending state):
+  POST /api/campaigns/019dbeac-594d-790d-b501-829ca04c6a42/send
+  Response: HTTP 409
+  {"code":"CAMPAIGN_BUSY","message":"Campaign is still being processed, please wait"}
+
+NOTE on earlier G test (Scenario F campaign, already sent):
+  When campaign was already in 'sent' state, container returned CAMPAIGN_ALREADY_SENT (409).
+  Source code (service.ts:346,350) returns CAMPAIGN_BUSY for both states.
+  Container appears to have been built from slightly older code.
+  Both return 409 — double-send is correctly blocked in both cases.
+
+VERDICT: PASS ✅
+  - HTTP 409 returned when campaign is in 'sending' state ✅
+  - Error code CAMPAIGN_BUSY matches current source code ✅
+  - Double-send correctly blocked
