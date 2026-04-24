@@ -113,11 +113,67 @@ async function rescueOrphanedSendingCampaigns(): Promise<string[]> {
   return rescued;
 }
 
+async function rescueOrphanedScheduledCampaigns(): Promise<string[]> {
+  const campaigns = await db("campaigns")
+    .where({ status: "scheduled" })
+    .select("id", "scheduled_at");
+
+  const rescued: string[] = [];
+
+  for (const campaign of campaigns) {
+    const seed = getDispatchSeedJobId(campaign.id);
+    const existing = await emailSendingQueue.getJob(seed);
+
+    if (existing) {
+      continue;
+    }
+
+    try {
+      if (!campaign.scheduled_at) {
+        continue;
+      }
+
+      const delay = campaign.scheduled_at.getTime() - Date.now();
+
+      await emailSendingQueue.add(
+        seed,
+        { campaignId: campaign.id },
+        {
+          jobId: seed,
+          delay: delay > 0 ? delay : undefined,
+        },
+      );
+
+      if (process.env.NODE_ENV !== "test") {
+        console.log(
+          JSON.stringify({
+            event: "reclaim.orphan-scheduled",
+            campaignId: campaign.id,
+            reason: "no-delayed-job",
+          }),
+        );
+      }
+
+      rescued.push(campaign.id);
+    } catch (error) {
+      if (process.env.NODE_ENV !== "test") {
+        console.error(
+          `[backend] reclaimer failed to enqueue scheduled dispatch for campaign ${campaign.id}`,
+          error,
+        );
+      }
+    }
+  }
+
+  return rescued;
+}
+
 export async function runReclaimerOnce(knex: Knex = db): Promise<string[]> {
   const reclaimed = await reclaimStalledRecipients(knex, env.EMAIL_SEND_STALLED_TIMEOUT_MS);
 
   await reenqueueDispatchForCampaigns(reclaimed);
   await rescueOrphanedSendingCampaigns();
+  await rescueOrphanedScheduledCampaigns();
 
   return reclaimed;
 }
@@ -134,6 +190,7 @@ export function startStalledRecipientReclaimer(
       const reclaimed = await reclaimStalledRecipients(knex, timeoutMs);
       await reenqueueDispatchForCampaigns(reclaimed);
       await rescueOrphanedSendingCampaigns();
+      await rescueOrphanedScheduledCampaigns();
 
       if (reclaimed.length > 0 && process.env.NODE_ENV !== "test") {
         console.log(
